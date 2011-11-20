@@ -17,15 +17,14 @@ class Punter extends Actor {
         println("checking tickets")
         tickets.foreach((t: Ticket) => {
           punters ! t
-          if (t.redeemed) {
-            println("i won! " + t.winnings + " for ticket " + t.ticketNo)
-          }
-
         })
       } else {
         println("punting")
         punters ! new Bet(Random.nextInt(500), Random.nextInt(4))
       }
+    }
+    case winningReceipt: WinningReceipt => {
+      println("i won! " + winningReceipt.winnings + " for ticket " + winningReceipt.ticket.ticketNo)
     }
     case _ => println("not supported")
   }

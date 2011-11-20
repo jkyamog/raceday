@@ -14,12 +14,11 @@ class Bookie extends Actor {
       self.channel ! new Ticket(bet.amount, bet.raceNumber)
     }
     case ticket: Ticket => {
-      println("got ticket " + ticket)
+      println("got ticket " + ticket.ticketNo + " " + ticket)
       if (ticket.raceNumber == RaceDay.getWinner) {
         val winnings = calcWinnings
         if (Book.debit(ticket.amount)) {
-          ticket.redeemed = true
-          ticket.winnings = winnings
+          self.channel ! new WinningReceipt(ticket, winnings)
           println("ticket won " + ticket.ticketNo)
         } else become(inHiding)
       }
@@ -27,7 +26,7 @@ class Bookie extends Actor {
   }
 
   def calcWinnings: Double = {
-    val totalAmount = bets.foldLeft(0.00) {(acc, bet) => acc + bet.amount}
+    val totalAmount = bets map (_.amount) sum //foldLeft(0.00) {(acc, bet) => acc + bet.amount}
 
     totalAmount / bets.size
   }

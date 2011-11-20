@@ -21,7 +21,6 @@ class BookieTest extends JUnitSuite {
         bookie !! ticket
 
         println(ticket)
-        println(ticket.winnings)
       }
       case _ => println("something went wrong")
     }

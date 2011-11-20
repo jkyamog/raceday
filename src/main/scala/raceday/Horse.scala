@@ -4,6 +4,7 @@ import akka.actor.{Scheduler, Actor}
 import util.Random
 import java.util.concurrent.TimeUnit.SECONDS
 
+
 class Horse(jockeyName: String, raceNumber: Int) extends Actor {
   private var distanceRan = 0;
   private val speed = Random
